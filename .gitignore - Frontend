@@ -1,0 +1,115 @@
+# ============================================
+# WOOD PRO - Frontend .gitignore
+# ============================================
+
+# ===== Node.js & Package Managers =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.npm
+.yarn/
+.pnp.*
+
+# ===== Build & Dist =====
+dist/
+build/
+.cache/
+.parcel-cache/
+.vite/
+out/
+*.local
+
+# ===== Environment Variables =====
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+
+# ===== IDEs & Editors =====
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains (WebStorm, IntelliJ)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ===== Operating System Files =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ===== Logs =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ===== Testing =====
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+
+# ===== Temporary Files =====
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ===== CSS Preprocessors =====
+*.css.map
+*.sass.map
+*.scss.map
+
+# ===== Bundle Analyzers =====
+stats.json
+bundle-stats.html
+
+# ===== React Specific (para cuando migres) =====
+.next/
+.nuxt/
+storybook-static/
+
+# ===== Cypress (E2E testing) =====
+cypress/videos/
+cypress/screenshots/
+
+# ===== Miscellaneous =====
+.eslintcache
+.stylelintcache
+*.tsbuildinfo

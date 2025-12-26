@@ -1,5 +1,5 @@
 // modules/kanban/KanbanCard.js
-// 🃏 Componente de tarjeta individual (CORREGIDO)
+// 🃏 Componente de tarjeta con click para abrir drawer
 
 import eventBus from '../../core/EventBus.js';
 
@@ -49,12 +49,22 @@ class KanbanCard {
             </div>
         `;
 
-        // Click para abrir drawer
+        // ✅ IMPORTANTE: Click para abrir drawer
         card.addEventListener('click', (e) => {
-            // Prevenir si está en drag
+            // No abrir si está arrastrando
             if (card.classList.contains('dragging')) return;
             
+            // Emitir evento para abrir drawer con los datos del pedido
             eventBus.emit('openDrawer', pedido);
+        });
+
+        // Drag events
+        card.addEventListener('dragstart', (e) => {
+            card.classList.add('dragging');
+        });
+
+        card.addEventListener('dragend', () => {
+            card.classList.remove('dragging');
         });
 
         return card;

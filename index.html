@@ -2,72 +2,114 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>SGP WOOD PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGP WOOD PRO v2.0</title>
+    
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Estilos principales -->
     <link rel="stylesheet" href="css/styles.css">
+    
+    <style>
+        /* Scrollbar personalizado */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
 
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Mejoras visuales */
+        #drawer-nombre:focus {
+            outline: none;
+            background: #fffbeb;
+        }
+        #btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+        .drawer-overlay {
+            backdrop-filter: blur(4px);
+        }
+    </style>
 </head>
 <body class="flex overflow-hidden bg-slate-100">
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="p-6 text-xl font-black text-amber-500 border-b border-slate-800">WOOD PRO</div>
+        <div class="p-6 text-xl font-black text-amber-500 border-b border-slate-800">
+            WOOD PRO <span class="text-xs text-slate-400">v2.0</span>
+        </div>
         
         <nav class="mt-6">
-            <button id="btn-kanban" onclick="navigateTo('kanban')" class="nav-item active">📋 Tablero Taller</button>
-            <button id="btn-dashboard" onclick="navigateTo('dashboard')" class="nav-item">📊 Dashboard</button>
-            <button id="btn-cotizador" onclick="navigateTo('cotizador')" class="nav-item">💰 Cotizador</button>
-            <button id="btn-inventario" onclick="navigateTo('inventario')" class="nav-item">🌲 Inventario</button>
+            <div class="nav-item active" data-view="kanban">📋 Tablero Taller</div>
+            <div class="nav-item" data-view="dashboard">📊 Dashboard</div>
+            <div class="nav-item" data-view="cotizador">💰 Cotizador</div>
+            <div class="nav-item" data-view="inventario">🌲 Inventario</div>
         </nav>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="main-content flex flex-col flex-1">
         
-        <div id="seccion-kanban" class="flex flex-col h-full">
-            <div class="px-8 py-4 bg-white border-b flex items-center gap-6 shadow-sm">
-                <div class="relative w-full max-w-md">
-                    <input type="text" id="globalSearch" placeholder="Buscar cliente o pedido..." 
-                        class="w-full bg-slate-100 border-none rounded-full py-2 px-4 text-sm focus:ring-2 focus:ring-amber-500 transition-all">
-                </div>
-
-                <div class="flex gap-2 items-center border-l pl-6 border-slate-200">
-                    <button onclick="filterBy('all')" class="filter-btn active" id="btn-all">Todos</button>
-                    <button onclick="filterBy('p-high')" class="filter-btn" id="btn-p-high">🔥 Urgentes</button>
-                    <button onclick="filterBy('bloqueado')" class="filter-btn" id="btn-bloqueado">⚠️ Bloqueados</button>
-                    <button onclick="filterBy('atrasado')" class="filter-btn" id="btn-atrasado">⏰ Atrasados</button>
-                </div>
+        <!-- TOP BAR (Buscador + Filtros) -->
+        <div class="px-8 py-4 bg-white border-b flex items-center gap-6 shadow-sm">
+            
+            <!-- Buscador -->
+            <div class="relative w-full max-w-md">
+                <input type="text" 
+                       id="globalSearch" 
+                       placeholder="Buscar cliente o pedido..." 
+                       class="w-full bg-slate-100 border-none rounded-full py-2 px-4 text-sm 
+                              focus:ring-2 focus:ring-amber-500 transition-all">
             </div>
 
-            <div id="board" class="kanban-board flex-1 overflow-x-auto p-8">
-                </div>
-        </div>
-
-        <div id="seccion-cotizador" class="hidden p-8 h-full overflow-y-auto">
-            <h1 class="text-2xl font-bold mb-6">Cotizador de Proyectos</h1>
-            <div class="bg-white p-6 rounded-xl shadow-sm max-w-2xl">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">Costo Materiales</label>
-                        <input type="number" id="costo_mat" class="w-full border p-2 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">Horas Hombre</label>
-                        <input type="number" id="horas_obra" class="w-full border p-2 rounded">
-                    </div>
-                </div>
-                <button onclick="calcularPresupuesto()" class="mt-4 bg-amber-500 text-white px-6 py-2 rounded-lg font-bold">Calcular</button>
-                
-                <div class="mt-6 p-4 bg-slate-50 rounded-lg">
-                    <p>Total Sugerido: <span id="res_total" class="font-bold text-xl text-green-600">$0</span></p>
-                    <p>Ganancia Neta: <span id="res_ganancia" class="font-bold text-slate-700">$0</span></p>
-                </div>
+            <!-- Filtros -->
+            <div class="flex gap-2 items-center border-l pl-6 border-slate-200">
+                <button class="filter-btn active" id="btn-all">Todos</button>
+                <button class="filter-btn" id="btn-p-high">🔥 Urgentes</button>
+                <button class="filter-btn" id="btn-bloqueado">⚠️ Bloqueados</button>
+                <button class="filter-btn" id="btn-atrasado">⏰ Atrasados</button>
             </div>
         </div>
 
+        <!-- TABLERO KANBAN -->
+        <div id="board" class="kanban-board flex-1 overflow-x-auto p-8">
+            <!-- Las columnas se generan dinámicamente -->
+        </div>
     </main>
 
-    <div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer()"></div>
+    <!-- DRAWER OVERLAY -->
+    <div id="drawerOverlay" class="drawer-overlay"></div>
+    
+    <!-- DRAWER (Panel Lateral) -->
     <div id="orderDrawer" class="order-drawer shadow-2xl"></div>
 
+    <!-- Scripts - Módulos ES6 -->
     <script type="module" src="src/app.js"></script>
 </body>
 </html>

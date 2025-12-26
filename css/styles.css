@@ -1,0 +1,311 @@
+/* 1. VARIABLES Y BASE */
+:root {
+    --sidebar-bg: #0f172a;    /* Slate 900 */
+    --accent: #f59e0b;        /* Amber 500 */
+    --bg-app: #f1f5f9;        /* Slate 100 */
+    --p-low: #94a3b8;
+    --p-normal: #3b82f6;
+    --p-high: #ef4444;
+}
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: var(--bg-app); 
+    margin: 0; 
+    overflow: hidden; 
+}
+
+/* 2. ESTRUCTURA PRINCIPAL */
+.sidebar { 
+    width: 260px; 
+    background: var(--sidebar-bg); 
+    color: white; 
+    height: 100vh; 
+    position: fixed; 
+    z-index: 50;
+}
+
+.main-content { 
+    margin-left: 260px; 
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh; 
+    width: calc(100% - 260px); 
+}
+
+/* Navegación Sidebar */
+.nav-item { 
+    padding: 12px 20px; 
+    cursor: pointer; 
+    color: #94a3b8; 
+    transition: 0.3s; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-size: 18px;
+}
+.nav-item:hover, .nav-item.active { 
+    background: #1e293b; 
+    color: white; 
+}
+.nav-item.active { 
+    border-left: 4px solid var(--accent); 
+}
+
+/* 3. TABLERO KANBAN */
+.kanban-board { 
+    display: flex; 
+    gap: 20px; 
+    padding: 24px; 
+    overflow-x: auto; 
+    flex: 1; 
+    align-items: flex-start;
+}
+
+.column { 
+    background: #f8fafc; /* Slate 50 */
+    min-width: 320px; 
+    border-radius: 16px; 
+    border: 1px solid #e2e8f0;
+    max-height: 90vh; 
+    display: flex;
+    flex-direction: column;
+}
+
+.column-header { 
+    padding: 15px; 
+    font-weight: Bold; 
+    font-size: 0.8rem; 
+    text-transform: uppercase; 
+    color: #475569; 
+    letter-spacing: 0.05em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 4. TARJETAS */
+.card-pro { 
+    background: white; 
+    margin: 0 12px 12px 12px; 
+    padding: 16px; 
+    border-radius: 12px; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+    border-left: 4px solid var(--p-normal); 
+    cursor: pointer; 
+    transition: all 0.2s ease;
+}
+
+.card-pro:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); 
+}
+
+.card-pro.p-high { border-left-color: var(--p-high); }
+.card-pro.p-low { border-left-color: var(--p-low); }
+
+.chip { 
+    font-size: 10px; 
+    padding: 4px 8px; 
+    border-radius: 6px; 
+    font-weight: 700; 
+    text-transform: uppercase;
+}
+
+/* 5. BOTONES DE FILTRO (Top Bar) */
+.filter-btn { 
+    padding: 8px 18px; 
+    border-radius: 999px; 
+    font-size: 13px; 
+    font-weight: 600;
+    background: #f1f5f9; 
+    color: #64748b; 
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    background: #e2e8f0;
+}
+
+.filter-btn.active { 
+    background: #fef3c7; /* Amber 100 */
+    color: #b45309;      /* Amber 700 */
+    border-color: var(--accent);
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+/* 6. DRAWER (PANEL LATERAL) */
+#orderDrawer {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 500px;
+    height: 100%;
+    background: white;
+    box-shadow: -10px 0 50px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+#orderDrawer.open { 
+    transform: translateX(0); 
+}
+
+.drawer-overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(15, 23, 42, 0.6); 
+    backdrop-filter: blur(2px);
+    display: none; 
+    z-index: 999; 
+}
+
+.drawer-overlay.open { 
+    display: block; 
+}
+
+/* 7. UTILIDADES */
+.card-hidden {
+    display: none !important;
+}
+
+.empty-state {
+    border: 2px dashed #cbd5e1; 
+    border-radius: 12px; 
+    padding: 30px;
+    text-align: center; 
+    color: #94a3b8; 
+    font-size: 13px; 
+    margin: 12px;
+}
+
+.add-btn-column {
+    width: calc(100% - 24px); 
+    margin: 12px; 
+    padding: 10px;
+    background: #ffffff; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 10px;
+    color: #64748b; 
+    font-size: 13px; 
+    font-weight: 600;
+    cursor: pointer; 
+    transition: 0.2s;
+}
+
+.add-btn-column:hover { 
+    background: #f8fafc; 
+    border-color: var(--accent); 
+    color: var(--accent); 
+}
+
+/* Estado de Cuello de Botella */
+.column.bottleneck {
+    background-color: #fef2f2; /* Un rojo muy sutil de fondo */
+    border: 1px solid #fee2e2;
+}
+
+.column.bottleneck .column-header {
+    background-color: #ef4444; /* Rojo intenso para la cabecera */
+    color: white;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0; /* Redondear solo arriba */
+}
+
+.column.bottleneck .column-header span:last-child {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* css/styles.css */
+
+/* Cuando la columna supera el límite */
+.column.bottleneck {
+    background-color: #fff1f2; /* Un rojo/rosa muy suave para el fondo del bloque */
+    border: 2px solid #fecaca; /* Borde rojo claro */
+    transition: background-color 0.3s ease;
+}
+
+.column.bottleneck .column-header {
+    background-color: #ef4444; /* Rojo intenso para el encabezado */
+    color: white;
+}
+
+/* El contador dentro de la columna roja */
+.column.bottleneck .column-header span:last-child {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* Asegura que la columna sea un contenedor flexible vertical */
+.column {
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh; /* Ajusta según prefieras */
+    min-width: 320px;
+    background: #f8fafc;
+    border-radius: 16px;
+    overflow: hidden; /* Evita que el contenido se salga de los bordes redondeados */
+}
+
+/* NUEVA CLASE: Contenedor de tarjetas con scroll independiente */
+.cards-container {
+    flex: 1; /* Ocupa todo el espacio disponible */
+    overflow-y: auto; /* Solo esta parte tiene scroll */
+    padding: 0 12px;
+}
+
+/* El botón de añadir ahora siempre tendrá su espacio al fondo */
+.add-btn-column {
+    flex-shrink: 0; /* No deja que el botón se aplaste */
+    margin: 12px;
+    /* ... resto de tus estilos ... */
+}
+
+/* Estilo para el área de carga de archivos */
+.dropzone-container {
+    border: 2px dashed #e2e8f0; /* Color pizarra suave */
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.dropzone-container:hover {
+    border-color: var(--accent); /* Naranja al pasar el mouse */
+    background-color: #fffbeb; /* Un toque de naranja muy suave */
+}
+
+/* Opcional: animar los paneles al cambiar de pestaña */
+.tab-pane {
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Feedback visual al arrastrar archivos */
+.dropzone-container.drag-over {
+    border-color: var(--accent);
+    background-color: #fef3c7; /* Un naranja muy claro */
+    transform: scale(1.02);
+}
+
+.hidden {
+    display: none !important;
+}

@@ -30,7 +30,10 @@ class KanbanBoard {
         this.subscribeToState();
         
         // Cargar datos iniciales
-        apiClient.obtenerPedidos();
+        if (stateManager.getState('pedidos').length === 0) {
+            apiClient.obtenerPedidos();
+        }
+
     }
 
     render() {
@@ -170,9 +173,87 @@ class KanbanBoard {
     }
 
     openQuickAdd(stage) {
-        console.log('🔧 Quick add para:', stage);
-        alert(`Función "Añadir Pedido" en ${stage} - Próximamente`);
+    console.log('🔧 Quick add para:', stage);
+
+    const drawer = document.getElementById("orderDrawer");
+    const overlay = document.getElementById("drawerOverlay");
+
+    if (!drawer || !overlay) {
+        console.error("Drawer u overlay no encontrados en el DOM");
+        return;
     }
+
+    // abrir
+    overlay.classList.add("open");
+    drawer.classList.add("open");
+
+    drawer.innerHTML = `
+        <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold">Nuevo pedido</h2>
+            <button id="btnCloseDrawer" class="text-slate-500 hover:text-slate-800">✕</button>
+        </div>
+
+        <div class="text-sm text-slate-600 mb-4">
+            Etapa inicial: <span class="font-bold">${stage}</span>
+        </div>
+
+        <div class="grid gap-3">
+            <label class="text-xs font-bold text-slate-400">Cliente</label>
+            <input id="qaCliente" class="w-full border rounded-lg p-2" placeholder="Nombre del cliente" />
+
+            <label class="text-xs font-bold text-slate-400">Descripción</label>
+            <textarea id="qaDesc" class="w-full border rounded-lg p-2" rows="3" placeholder="Notas del pedido..."></textarea>
+
+            <div class="flex gap-2 mt-2">
+            <button id="btnGuardarQuickAdd" class="bg-amber-500 text-white px-4 py-2 rounded-lg font-bold">
+                Guardar
+            </button>
+            <button id="btnCancelarQuickAdd" class="bg-slate-100 text-slate-700 px-4 py-2 rounded-lg font-bold">
+                Cancelar
+            </button>
+            </div>
+        </div>
+        </div>
+    `;
+
+    const close = () => {
+        overlay.classList.remove("open");
+        drawer.classList.remove("open");
+    };
+
+        drawer.querySelector("#btnCloseDrawer").addEventListener("click", close);
+        drawer.querySelector("#btnCancelarQuickAdd").addEventListener("click", close);
+        overlay.onclick = close;
+
+        drawer.querySelector("#btnGuardarQuickAdd").addEventListener("click", () => {
+        const cliente = drawer.querySelector("#qaCliente").value.trim();
+        const desc = drawer.querySelector("#qaDesc").value.trim();
+
+        if (!cliente) {
+            alert("Pon el nombre del cliente.");
+            return;
+        }
+
+        const nuevoPedido = {
+            id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+            cliente_mueble: cliente,
+            descripcion: desc,          // extra, por si luego la muestras en la card/drawer
+            etapa: stage,               // "diseno", "corte", etc.
+            prioridad: "p-normal",      // 👈 importante para tu CSS/KanbanCard
+            bloqueado: false,
+            deadline: "",               // o null
+            tareas: [],                 // 👈 importante para el progreso
+            fecha_creacion: new Date().toISOString()
+        };
+
+        stateManager.agregarPedido(nuevoPedido);
+        close();
+        });
+
+
+    }
+
 }
 
 export default KanbanBoard;

@@ -17,6 +17,8 @@ class StateManager {
         };
         
         this.subscribers = new Map(); // { key: [callbacks] }
+        this.subscribe('pedidos', () => this.guardarEnLocalStorage());
+
     }
 
     // ✅ Obtener estado (inmutable)
@@ -91,8 +93,35 @@ class StateManager {
         this.setState('pedidos', pedidos);
     }
 
+    agregarPedido(pedido) {
+    const pedidos = this.getState('pedidos');
+    this.setState('pedidos', [pedido, ...pedidos]);
+    }
+
+    
     obtenerPedido(id) {
         return this.getState('pedidos').find(p => p.id === id);
+    }
+
+
+    cargarDesdeLocalStorage() {
+    try {
+        const raw = localStorage.getItem('woodpro_pedidos');
+        if (!raw) return;
+        const pedidos = JSON.parse(raw);
+        if (Array.isArray(pedidos)) this.setState('pedidos', pedidos);
+    } catch (e) {
+        console.warn('No se pudo cargar pedidos del localStorage', e);
+    }
+    }
+
+    guardarEnLocalStorage() {
+    try {
+        const pedidos = this.getState('pedidos');
+        localStorage.setItem('woodpro_pedidos', JSON.stringify(pedidos));
+    } catch (e) {
+        console.warn('No se pudo guardar pedidos en localStorage', e);
+    }
     }
 
     // Filtros computados (no guardamos el resultado, se calcula on-demand)

@@ -25,6 +25,9 @@ class App {
 
     start() {
         try {
+
+            stateManager.cargarDesdeLocalStorage();
+
             // Verificar que los elementos necesarios existen
             const board = document.getElementById('board');
             const drawer = document.getElementById('orderDrawer');
@@ -39,7 +42,7 @@ class App {
                 console.error('❌ Elementos del drawer no encontrados');
                 return;
             }
-
+            
             // Inicializar módulos
             console.log('📋 Inicializando Kanban...');
             this.modules.kanban = new KanbanBoard('board');
